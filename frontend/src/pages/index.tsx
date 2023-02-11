@@ -1,7 +1,7 @@
-import MessagesContainer from '@/components/Messages/MessagesContainer'
-import Rooms from '@/components/Rooms/Rooms'
+import Lobbys from '@/components/Lobby/Lobby'
+import EVENTS from '@/config/events'
 import { Inter } from '@next/font/google'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useSockets } from "../context/socket.context"
 
 
@@ -18,14 +18,23 @@ export default function Home() {
     }
 
     setUsername(value)
-
+    socket.emit(EVENTS.CLIENT.GET_LOBBY_INFO)
     localStorage.setItem("username", value)
   }
+
+  useEffect(() => {
+    if (usernameRef)
+    usernameRef!.current!.value = localStorage.getItem('username') || ""
+  }, [])
 
   return (
     <div>
       {!username ? (
+
         <div>
+          <h1>Lobby Simulator</h1>
+          <p>Tired of playing games, losing and getting trashed for it?</p>
+          <p>Join lobby simulator, where you can just chill and talk on the lobby without any gameplay to disturb you.</p>
           <input
             placeholder='Enter a username'
             ref={usernameRef} />
@@ -34,11 +43,13 @@ export default function Home() {
             Find Lobby
           </button>
         </div>
+
       ) : (
-        <>
-          <Rooms />
-          <MessagesContainer />
-        </>
+
+        <div>
+          <Lobbys />
+        </div>
+
       )}
 
     </div>
