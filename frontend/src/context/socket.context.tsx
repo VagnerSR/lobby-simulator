@@ -1,5 +1,4 @@
 import EVENTS from "@/config/events";
-import { ILobby } from "@/interface/ILobby";
 import { IMessage } from "@/interface/IMessage";
 import { IUser } from "@/interface/IUser";
 import { createContext, useContext, useEffect, useState } from "react"
@@ -13,9 +12,7 @@ interface Context {
     lobbyId?: string
     messages?: IMessage[]
     setMessages: Function
-    users?: Record<string, IUser>
-    lobbyInfo?: ILobby[]
-    setLobbyInfo?: Function
+    lobbyInfo?: IUser[]
 }
 
 const socket = io(SOCKET_URL)
@@ -31,8 +28,7 @@ function SocketsProvider(props: any) {
     const [username, setUsername] = useState("")
     const [lobbyId, setLobbyId] = useState("")
     const [messages, setMessages] = useState<IMessage[]>([])
-    const [users, setUsers] = useState({})
-    const [lobbyInfo, setLobbyInfo] = useState<ILobby[]>([])
+    const [lobbyInfo, setLobbyInfo] = useState<IUser[]>([])
 
     useEffect(() => {
         window.onfocus = function () {
@@ -43,10 +39,6 @@ function SocketsProvider(props: any) {
     socket.on(EVENTS.SERVER.JOINED_LOBBY, (value) => {
         setLobbyId(value)
         setMessages([])
-    })
-
-    socket.on(EVENTS.SERVER.JOINED_LOBBY_USER, (value) => {
-        setUsers(value)
     })
 
     socket.on(EVENTS.SERVER.LOBBY_USERS_LIST, (value) => {
@@ -85,7 +77,6 @@ function SocketsProvider(props: any) {
                 lobbyId,
                 messages,
                 setMessages,
-                users,
                 lobbyInfo,
             }}
             {...props}

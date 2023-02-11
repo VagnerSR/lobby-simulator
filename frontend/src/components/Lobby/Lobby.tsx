@@ -1,6 +1,5 @@
 import { useSockets } from "@/context/socket.context";
-import { ILobby } from "@/interface/ILobby";
-import { useEffect, useRef, useState } from "react";
+import { getLength } from "@/utils/getLength";
 import EVENTS from "../../config/events"
 import MessagesContainer from "../Messages/MessagesContainer";
 import lobbysJson from "./lobby.json"
@@ -32,11 +31,6 @@ function Lobbys() {
 
     function goBackToHome() {
         setUsername('')
-    }
-
-    function getLength (array: ILobby[], compare: string) {
-        const arrayLength = array.filter(value => compare === value.lobby)
-        return arrayLength.length
     }
 
     return (
@@ -78,8 +72,8 @@ function Lobbys() {
 
                                                 if (lobby.id === info.lobby) {
                                                     return (
-                                                        <li key={info._id}>
-                                                            {info.nome}
+                                                        <li key={info.id}>
+                                                            {info.username}
                                                         </li>
                                                     )
                                                 }

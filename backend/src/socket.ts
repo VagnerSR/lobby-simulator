@@ -1,7 +1,4 @@
-import { nanoid } from "nanoid";
 import { Server, Socket } from "socket.io";
-import { addUser, getUsers, removeUser } from "./db/lobbysDb";
-import { IUser } from "./interface/IUser";
 import logger from "./utils/logger";
 import { getUsersList, userJoin, userLeave } from "./utils/users";
 
@@ -13,7 +10,8 @@ const EVENTS = {
     SEND_LOBBY_MESSAGE: "SEND_LOBBY_MESSAGE",
     JOIN_LOBBY: "JOIN_LOBBY",
     LEAVE_LOBBY: "LEAVE_LOBBY",
-    GET_LOBBY_INFO: "GET_LOBBY_INFO"
+    GET_LOBBY_INFO: "GET_LOBBY_INFO",
+    CHECK_USERNAME: "CHECK_USERNAME"
   },
   SERVER: {
     LOBBYS: "LOBBYS",
@@ -27,9 +25,6 @@ const EVENTS = {
   },
 };
 
-const users: Record<string, IUser> = {
-
-};
 
 function socket({ io }: { io: Server }) {
   logger.info(`Sockets enabled`)
@@ -37,6 +32,11 @@ function socket({ io }: { io: Server }) {
   io.on(EVENTS.connection, (socket: Socket) => {
     logger.info(`User connected ${socket.id}`)
     
+
+    socket.on(EVENTS.CLIENT.GET_LOBBY_INFO, () => {
+      io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, getUsersList())
+    })
+
 
     /**
      * When a lobby is created
@@ -58,18 +58,11 @@ function socket({ io }: { io: Server }) {
     })
     */
 
-    // socket.on(EVENTS.CLIENT.GET_LOBBY_INFO, async () => {
-    //   io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, await getUsers())
-    // })
-
-    socket.on(EVENTS.CLIENT.GET_LOBBY_INFO, async () => {
-      io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, getUsersList())
-    })
 
     /**
      * When a user joins lobby
      */
-    socket.on(EVENTS.CLIENT.JOIN_LOBBY, async (value: { key: string, username: string }) => {
+    socket.on(EVENTS.CLIENT.JOIN_LOBBY, (value: { key: string, username: string }) => {
       const rooms = io.sockets.adapter.rooms
       const room = rooms.get(value.key)
       const userId = socket.id
@@ -80,41 +73,22 @@ function socket({ io }: { io: Server }) {
         socket.join(value.key)
         socket.emit(EVENTS.SERVER.JOINED_LOBBY, value.key);
 
-        users[userId] = {
-          userId: userId,
-          name: value.username,
-          userLobby: value.key
-        }
-
-        await addUser(value.key, value.username, userId)
         userJoin(userId, value.username, value.key)
-        
-       // io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, await getUsers())
+
+        // Refresh userlist on frontend
         io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, getUsersList())
 
-        socket.emit(EVENTS.SERVER.JOINED_LOBBY_USER, users)
-        socket.to(value.key).emit(EVENTS.SERVER.JOINED_LOBBY_USER, users)
-
-      } 
+      }
       //when room already has someone on it
       else if (room!.size <= 5) {
 
         socket.join(value.key)
         socket.emit(EVENTS.SERVER.JOINED_LOBBY, value.key);
 
-        users[userId] = {
-          userId: userId,
-          name: value.username,
-          userLobby: value.key
-        }
-
-        await addUser(value.key, value.username, userId)
         userJoin(userId, value.username, value.key)
 
-       // io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, await getUsers())
+        // Refresh userlist on frontend
         io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, getUsersList())
-        socket.emit(EVENTS.SERVER.JOINED_LOBBY_USER, users)
-        socket.to(value.key).emit(EVENTS.SERVER.JOINED_LOBBY_USER, users)
 
         const date = new Date()
         socket.to(value.key).emit(EVENTS.SERVER.LOBBY_MESSAGE, {
@@ -131,19 +105,13 @@ function socket({ io }: { io: Server }) {
     /**
      * When a user leaves lobby
     */
-    socket.on(EVENTS.CLIENT.LEAVE_LOBBY, async ({ lobbyId, username }) => {
+    socket.on(EVENTS.CLIENT.LEAVE_LOBBY, ({ lobbyId, username }) => {
       const userId = socket.id
 
       socket.leave(lobbyId)
-      delete users[userId]
-      await removeUser(userId)
       userLeave(userId)
-      // Refresh db data on frontend
-      //io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, await getUsers())
+      // Refresh userlist on frontend
       io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, getUsersList())
-      // Refresh users list in frontend
-      socket.emit(EVENTS.SERVER.JOINED_LOBBY_USER, users)
-      socket.to(lobbyId).emit(EVENTS.SERVER.JOINED_LOBBY_USER, users)
       //clear lobbyId
       socket.emit(EVENTS.SERVER.LEAVE_LOBBY)
       // Message user left the lobby
@@ -173,29 +141,30 @@ function socket({ io }: { io: Server }) {
     /**
      * Disconecting
      */
-    socket.on(EVENTS.disconnect, async () => {
+    socket.on(EVENTS.disconnect, () => {
       const userId = socket.id
-      if (!users[userId]) return
+      const usersList = getUsersList()
+      usersList.map((user) => {
+        if (userId === user.id) {
+          const lobbyId = user.lobby
+          const username = user.username
 
-      const lobbyId = users[userId].userLobby
-      const username = users[userId].name
+          // Message user left the lobby
+          const date = new Date()
+          socket.to(lobbyId).emit(EVENTS.SERVER.LOBBY_MESSAGE, {
+            message: ``,
+            username: `${username} has left the lobby`,
+            hours: `${date.getHours()}`,
+            minutes: `${date.getMinutes()}`
+          })
 
-      delete users[userId]
-      await removeUser(userId)
-      userLeave(userId)
-      // Refresh db data on frontend
-     // io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, await getUsers())
-      io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, getUsersList())
-      // Refresh users list in frontend
-      socket.to(lobbyId).emit(EVENTS.SERVER.JOINED_LOBBY_USER, users)
-      // Message user left the lobby
-      const date = new Date()
-      socket.to(lobbyId).emit(EVENTS.SERVER.LOBBY_MESSAGE, {
-        message: ``,
-        username: `${username} has left the lobby`,
-        hours: `${date.getHours()}`,
-        minutes: `${date.getMinutes()}`
+          // Refresh userlist on frontend
+          userLeave(userId)
+          io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, getUsersList())
+
+        }
       })
+
     });
   })
 

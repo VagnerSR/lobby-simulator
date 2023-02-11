@@ -17,9 +17,9 @@ export default function Home() {
       return
     }
 
-    setUsername(value)
-    socket.emit(EVENTS.CLIENT.GET_LOBBY_INFO)
-    localStorage.setItem("username", value)
+      setUsername(value)
+      socket.emit(EVENTS.CLIENT.GET_LOBBY_INFO)
+      localStorage.setItem("username", value)
   }
 
   useEffect(() => {

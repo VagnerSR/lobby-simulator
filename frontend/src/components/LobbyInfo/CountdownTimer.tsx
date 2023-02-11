@@ -3,14 +3,7 @@ import { useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
 
 interface CountdownTimerProps {
-    timeStampMS: number
-    confirm: boolean
-    setConfirm: Function
-    socket: Socket
-    eventString: string
-    lobbyId: string
-    username: string
-    setTimeStampMS: Function
+
 }
 
 interface IRemaningTime {
@@ -23,44 +16,57 @@ const defaultRemaningTime: IRemaningTime = {
     minutes: "04"
 }
 
-function CountdownTimer({ 
-    timeStampMS, confirm, setConfirm, socket, 
-    eventString, lobbyId, username, setTimeStampMS }: CountdownTimerProps) {
+function CountdownTimer({}: CountdownTimerProps) {
 
+    const [timeStamp, setTimeStamp] = useState(new Date().getTime() + 10000)
     const [remaningTime, setRemaningTime] = useState(defaultRemaningTime)
+    const [countdownCheck, setCountdownCheck] = useState(false)
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            upadteRemaningTime(timeStampMS.toString())
+            upadteRemaningTime(timeStamp.toString())
         }, 1000)
         return () => clearInterval(intervalId)
-    }, [timeStampMS])
+    }, [timeStamp])
 
     useEffect(() => {
-        remainOnLobbyOrLeave()
+        countdownZero()
     }, [remaningTime])
 
     function upadteRemaningTime(countdown: string) {
         setRemaningTime(countdownCalc(countdown))
     }
 
-    function remainOnLobbyOrLeave () {
-        if(remaningTime.seconds === '00' && remaningTime.minutes === '00') {
-            const getConfirm = window.confirm(`No game was found! \nClick Ok to reset the queue or cancel to leave the lobby`)
-            setConfirm(getConfirm)
-            if(confirm === true) {
-                setTimeStampMS(new Date().getTime() + 10000)
-            } else {
-                socket.emit(eventString, { lobbyId, username })
-            }
+    function countdownZero() {
+        if (remaningTime.seconds === '00' && remaningTime.minutes === '00') {
+            setCountdownCheck(true)
         }
+    }
+
+    function restartQueue() {
+        setTimeStamp(new Date().getTime() + 10000)
+        setCountdownCheck(false)
     }
 
     return (
         <div>
-            <span>
-                Finding game
-            </span>
+            {
+                countdownCheck === false ? (
+                    <span>
+                        Finding game
+                    </span>
+                ) : (
+                    <div>
+                        <span>
+                            Something went wrong!
+                        </span>
+                        <button onClick={restartQueue}>
+                            Restart Queue
+                        </button>
+                    </div>
+                )
+            }
+
             <span>
                 {`${remaningTime.minutes}:`}
             </span>

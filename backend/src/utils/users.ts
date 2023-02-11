@@ -1,11 +1,6 @@
-interface IUser {
-    id: string;
-    username: string;
-    lobby: string;
-}
+import { IUser } from "../interface/IUser";
 
 const users: IUser[] = [];
-console.log(users)
 
 export function getUsersList() {
   return users;
@@ -14,15 +9,15 @@ export function getUsersList() {
 // Join user to chat
 export function userJoin(id: string, username: string, lobby: string) {
   const user = { id, username, lobby };
-
   users.push(user);
-
   return user;
 }
 
 // Get current user
-export function getCurrentUser(id: string) {
-  return users.find(user => user.id === id);
+export function checkUserNameExists(username: string) {
+  const ckeckingUsername = users.some(user => user.username === username)
+
+  return ckeckingUsername
 }
 
 // User leaves chat

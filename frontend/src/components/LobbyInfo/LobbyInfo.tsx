@@ -1,29 +1,20 @@
 import EVENTS from "@/config/events";
 import { useSockets } from "@/context/socket.context";
+import { getLength } from "@/utils/getLength";
 import { useEffect, useState } from "react";
 import CountdownTimer from "./CountdownTimer";
 import LookingForUsers from "./LookingForUsers";
 
 function LobbyInfo() {
-    const [confirm, setConfirm] = useState(true)
-    const [fiveMinAhead, setFiveMinAhead] = useState(new Date().getTime() + 10000)
+    
 
-    const { socket, lobbyId, username, users } = useSockets()
-    const usersInLobby = []
+    const { socket, lobbyId, username, lobbyInfo } = useSockets()
     //const fiveMinAhead: number = new Date().getTime() + 300000;
 
     function handleLeaveLobby() {
         socket.emit(EVENTS.CLIENT.LEAVE_LOBBY, { lobbyId, username })
         socket.emit(EVENTS.CLIENT.GET_LOBBY_INFO)
     }
-
-    const setUsersInLobby = Object.keys(users!).map((user) => {
-        if (lobbyId === users![user].userLobby) {
-            if (usersInLobby.length <= 6) {
-                usersInLobby.push(users![user].userId)
-            }
-        }
-    })
 
     return (
         <div>
@@ -32,30 +23,22 @@ function LobbyInfo() {
             </button>
 
             {
-                usersInLobby.length >= 6 ? (
-                    <CountdownTimer 
-                        timeStampMS={fiveMinAhead}
-                        setTimeStampMS={setFiveMinAhead}
-                        confirm={confirm}
-                        setConfirm={setConfirm}
-                        socket={socket}
-                        eventString={EVENTS.CLIENT.LEAVE_LOBBY}
-                        lobbyId={lobbyId!}
-                        username={username!}
+                getLength(lobbyInfo!, lobbyId!) >= 6 ? (
+                    <CountdownTimer                     
                          />
                 ) : (
                 <LookingForUsers 
-                    usersInLobby={usersInLobby.length} /> 
+                    usersInLobby={getLength(lobbyInfo!, lobbyId!)} /> 
             )}
 
             <ul>
-                {Object.keys(users!).map((user) => {
+                {lobbyInfo!.map((info) => {
 
-                    if (lobbyId !== users![user].userLobby) return
+                    if (lobbyId !== info.lobby) return
 
                     return (
-                        <li key={users![user].userId}>
-                            {users![user].name}
+                        <li key={info.id}>
+                            {info.username}
                         </li>
                     )
                 })}

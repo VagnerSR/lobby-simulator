@@ -1,5 +1,5 @@
 export interface IUser {
-    userId: string;
-    name: string;
-    userLobby: string;
+    id: string
+    username: string
+    lobby: string
 }
