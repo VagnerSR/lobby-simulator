@@ -3,6 +3,7 @@ import { Server, Socket } from "socket.io";
 import { addUser, getUsers, removeUser } from "./db/lobbysDb";
 import { IUser } from "./interface/IUser";
 import logger from "./utils/logger";
+import { getUsersList, userJoin, userLeave } from "./utils/users";
 
 const EVENTS = {
   connection: "connection",
@@ -57,8 +58,12 @@ function socket({ io }: { io: Server }) {
     })
     */
 
+    // socket.on(EVENTS.CLIENT.GET_LOBBY_INFO, async () => {
+    //   io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, await getUsers())
+    // })
+
     socket.on(EVENTS.CLIENT.GET_LOBBY_INFO, async () => {
-      io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, await getUsers())
+      io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, getUsersList())
     })
 
     /**
@@ -82,8 +87,11 @@ function socket({ io }: { io: Server }) {
         }
 
         await addUser(value.key, value.username, userId)
+        userJoin(userId, value.username, value.key)
         
-        io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, await getUsers())
+       // io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, await getUsers())
+        io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, getUsersList())
+
         socket.emit(EVENTS.SERVER.JOINED_LOBBY_USER, users)
         socket.to(value.key).emit(EVENTS.SERVER.JOINED_LOBBY_USER, users)
 
@@ -101,8 +109,10 @@ function socket({ io }: { io: Server }) {
         }
 
         await addUser(value.key, value.username, userId)
+        userJoin(userId, value.username, value.key)
 
-        io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, await getUsers())
+       // io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, await getUsers())
+        io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, getUsersList())
         socket.emit(EVENTS.SERVER.JOINED_LOBBY_USER, users)
         socket.to(value.key).emit(EVENTS.SERVER.JOINED_LOBBY_USER, users)
 
@@ -127,8 +137,10 @@ function socket({ io }: { io: Server }) {
       socket.leave(lobbyId)
       delete users[userId]
       await removeUser(userId)
+      userLeave(userId)
       // Refresh db data on frontend
-      io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, await getUsers())
+      //io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, await getUsers())
+      io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, getUsersList())
       // Refresh users list in frontend
       socket.emit(EVENTS.SERVER.JOINED_LOBBY_USER, users)
       socket.to(lobbyId).emit(EVENTS.SERVER.JOINED_LOBBY_USER, users)
@@ -170,8 +182,10 @@ function socket({ io }: { io: Server }) {
 
       delete users[userId]
       await removeUser(userId)
+      userLeave(userId)
       // Refresh db data on frontend
-      io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, await getUsers())
+     // io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, await getUsers())
+      io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, getUsersList())
       // Refresh users list in frontend
       socket.to(lobbyId).emit(EVENTS.SERVER.JOINED_LOBBY_USER, users)
       // Message user left the lobby

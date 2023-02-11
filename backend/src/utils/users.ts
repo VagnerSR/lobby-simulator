@@ -7,6 +7,10 @@ interface IUser {
 const users: IUser[] = [];
 console.log(users)
 
+export function getUsersList() {
+  return users;
+}
+
 // Join user to chat
 export function userJoin(id: string, username: string, lobby: string) {
   const user = { id, username, lobby };
