@@ -1,11 +1,18 @@
 import { useSockets } from "@/context/socket.context";
 import { getLength } from "@/utils/getLength";
 import EVENTS from "../../config/events"
+import LButton from "../LButton/LButton";
 import MessagesContainer from "../Messages/MessagesContainer";
 import lobbysJson from "./lobby.json"
+import LiUser from "../LiUser/LiUser";
+import Modal from "../Modal/Modal";
+import { useState } from "react";
+
 
 function Lobbys() {
-    const { socket, lobbyId, username, setUsername, lobbyInfo } = useSockets()
+    const { socket, lobbyId, username, setUsername, lobbyInfo, showMyModal, setShowMyModal } = useSockets()
+
+    const handleOnClose = () => setShowMyModal!(false)
 
     /*
     * * For now creating a lobby is disabled, only pre-defined lobbys
@@ -37,11 +44,13 @@ function Lobbys() {
         <>
             {lobbyId! ? <MessagesContainer /> :
                 <>
-                    <button onClick={goBackToHome}>
-                        Back
-                    </button>
+                    <LButton
+                        text="Go back"
+                        onClickFunc={goBackToHome} />
 
-                    <nav>
+
+                    <nav className="m-4 rounded bg-slate-900">
+
 
 
                         {/* 
@@ -56,15 +65,17 @@ function Lobbys() {
             </button>
         </div> 
         */}
-                        <ul>
+                        <ul >
                             {lobbysJson.map((lobby) => {
                                 return (
-                                    <div key={lobby.id} >
+                                    <div className="p-4"
+                                        key={lobby.id} >
                                         <button
+                                            className="w-full rounded p-2 bg-slate-700 hover:bg-slate-600 text-gray-200"
                                             disabled={lobby.id === lobbyId}
                                             title={`Join ${lobby.name}`}
                                             onClick={() => handleJoinLobby(lobby.id)} >
-                                            { `${lobby.name} - ${getLength(lobbyInfo!, lobby.id)} / 6` }
+                                            {`${lobby.name} - ${getLength(lobbyInfo!, lobby.id)} / 6`}
                                         </button>
 
                                         <ul>
@@ -72,9 +83,9 @@ function Lobbys() {
 
                                                 if (lobby.id === info.lobby) {
                                                     return (
-                                                        <li key={info.id}>
-                                                            {info.username}
-                                                        </li>
+                                                        <LiUser
+                                                            text={info.username}
+                                                            key={info.id} />
                                                     )
                                                 }
                                             })}
@@ -85,6 +96,10 @@ function Lobbys() {
                         </ul>
                     </nav>
                 </>}
+
+            <Modal
+                visible={showMyModal!}
+                onClose={handleOnClose} />
         </>
     );
 }

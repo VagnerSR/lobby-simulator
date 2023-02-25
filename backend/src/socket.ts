@@ -131,7 +131,7 @@ function socket({ io }: { io: Server }) {
       const date = new Date()
 
       socket.to(lobbyId).emit(EVENTS.SERVER.LOBBY_MESSAGE, {
-        message,
+        message: `- ${message}`,
         username,
         hours: `${date.getHours()}`,
         minutes: `${date.getMinutes()}`
