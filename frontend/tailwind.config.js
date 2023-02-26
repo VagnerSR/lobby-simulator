@@ -15,16 +15,80 @@ module.exports = {
     extend: {
       display: ["group-hover"],
       keyframes: {
-        wave: {
-          '0%': { transform: 'translateX(3px)' },
-          '30%': { transform: 'translateX(6px)' },
-          '60%': { transform: 'translateX(9px)' },
-          '100%': { transform: 'translateX(10px)' },
+        wavebash: {
+          '0%': {
+            opacity: 1,
+            transform: 'translateX(10px)'
+          },
+          '20%': {
+            opacity: 0.5,
+            transform: 'translateX(20px)'
+          },
+          '40%': {
+            opacity: 0,
+            transform: 'translateX(30px)'
+          },
+          '60%': {
+            opacity: 0,
+          },
+          '80%': {
+            opacity: 0,
+          },
+          '100%': {
+            opacity: 0,
+          },
+        },
+        wavebashtwo: {
+          '0%': {
+            opacity: 0,
+          },
+          '20%': {
+            opacity: 0,
+          },
+          '40%': {
+            opacity: 0.5,
+            transform: 'translateX(10px)'
+          },
+          '60%': {
+            opacity: 1,
+            transform: 'translateX(20px)'
+          },
+          '80%': {
+            opacity: 1,
+            transform: 'translateX(30px)'
+          },
+          '100%': {
+            opacity: 0,
+            transform: 'translateX(30px)'
+          },
+        },
+
+        wavetilt: {
+          '0%': {
+            transform: 'rotate(0deg)'
+          },
+          '20%': {
+            transform: 'rotate(0deg)'
+          },
+          '40%': {
+            transform: 'rotate(0deg)'
+          },
+          '60%': {
+            transform: 'rotate(0deg)'
+          },
+          '80%': {
+            transform: 'rotate(0deg)'
+          },
+          '100%': {
+            transform: 'rotate(45deg)'
+          },
         },
       },
       animation: {
         'spin-slow': 'spin 2s linear infinite',
-        'bash': 'wave 1s linear infinite',
+        'bash': 'wavebash 2s linear infinite',
+        'bashtwo': 'wavebashtwo 2s linear infinite',
+        'tilt': 'wavetilt 2s linear infinite',
       }
     },
   },

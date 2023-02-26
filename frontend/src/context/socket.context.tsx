@@ -15,6 +15,8 @@ interface Context {
     lobbyInfo?: IUser[]
     showMyModal?: boolean
     setShowMyModal?: Function
+    active?: boolean
+    setActive?: Function
 }
 
 const socket = io(SOCKET_URL)
@@ -32,6 +34,7 @@ function SocketsProvider(props: any) {
     const [messages, setMessages] = useState<IMessage[]>([])
     const [lobbyInfo, setLobbyInfo] = useState<IUser[]>([])
     const [showMyModal, setShowMyModal] = useState(false)
+    const [active, setActive] = useState(false)
 
     useEffect(() => {
         window.onfocus = function () {
@@ -82,7 +85,9 @@ function SocketsProvider(props: any) {
                 setMessages,
                 lobbyInfo,
                 showMyModal,
-                setShowMyModal
+                setShowMyModal,
+                active,
+                setActive
             }}
             {...props}
         />
