@@ -21,7 +21,7 @@ function Queue() {
     }, [time])
 
     function countdownZero() {
-        if (time === 300000) {
+        if (time === 5000) {
             setQueueCheck(true)
         }
     }
@@ -39,7 +39,7 @@ function Queue() {
                         Finding game <AiOutlineLoading3Quarters className="absolute bottom-1 left-[120px] animate-spin-slow" />
                     </span>
                 ) : (
-                    <div>
+                    <div className="flex flex-col justify-center items-center gap-2 mb-2">
                         <span className="text-xl">
                             Something went wrong!
                         </span>

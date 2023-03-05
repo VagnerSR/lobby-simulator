@@ -21,7 +21,8 @@ const EVENTS = {
     LEAVE_LOBBY: "LEAVE_LOBBY",
     QUEUE: "QUEUE",
     LOBBY_FULL: "LOBBY_FULL",
-    LOBBY_USERS_LIST: "LOBBY_USERS_LIST"
+    LOBBY_USERS_LIST: "LOBBY_USERS_LIST",
+    CHECK_USERNAME: "CHECK_USERNAME"
   },
 };
 
@@ -35,6 +36,21 @@ function socket({ io }: { io: Server }) {
 
     socket.on(EVENTS.CLIENT.GET_LOBBY_INFO, () => {
       io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, getUsersList())
+    })
+
+    socket.on(EVENTS.CLIENT.CHECK_USERNAME, ({ username, key }) => {
+      const lobbysInfo = getUsersList()
+      const userList = lobbysInfo.map((lobbyMapped) => {
+        if(lobbyMapped.lobby === key) {
+          return lobbyMapped.username
+        }
+      })
+      if (userList.includes(username)) {
+        socket.emit(EVENTS.SERVER.CHECK_USERNAME, true)
+      } else {
+        socket.emit(EVENTS.SERVER.CHECK_USERNAME, false)
+      }
+
     })
 
 

@@ -48,7 +48,9 @@ function Header() {
                     alt="Simulator logo" />
             </div>
 
-            <NavMenu />
+            <div className="">
+                <NavMenu />
+            </div>
         </header>
     );
 }

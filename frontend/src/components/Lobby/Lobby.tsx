@@ -31,12 +31,18 @@ function Lobbys() {
     function handleJoinLobby(key: string) {
         if (key === lobbyId) return
 
-        socket.emit(EVENTS.CLIENT.LEAVE_LOBBY, { lobbyId, username })
-        socket.emit(EVENTS.CLIENT.GET_LOBBY_INFO)
-        socket.emit(EVENTS.CLIENT.JOIN_LOBBY, { key, username })
-        socket.emit(EVENTS.CLIENT.GET_LOBBY_INFO)
-        router.push('/lobbymessage')
-        setActive!(false)
+        socket.emit(EVENTS.CLIENT.CHECK_USERNAME, { username, key })
+        socket.on(EVENTS.SERVER.CHECK_USERNAME, (value) => {
+            if(value === false) {
+                socket.emit(EVENTS.CLIENT.GET_LOBBY_INFO)
+                socket.emit(EVENTS.CLIENT.LEAVE_LOBBY, { lobbyId, username })
+                socket.emit(EVENTS.CLIENT.JOIN_LOBBY, { key, username })
+                router.push('/lobbymessage')
+                setActive!(false)
+            } else {
+                setShowMyModal!(true)
+            }
+        })
     }
 
     return (
@@ -61,8 +67,9 @@ function Lobbys() {
                             <div className="p-4"
                                 key={lobby.id} >
                                 <button
-                                    className="w-full rounded p-2 bg-slate-700 hover:bg-slate-600 text-gray-200"
-                                    disabled={lobby.id === lobbyId}
+                                    className="w-full rounded p-2 bg-slate-700 hover:bg-slate-600
+                                    text-gray-200 disabled:text-gray-400 disabled:hover:bg-slate-700"
+                                    disabled={lobby.id === lobbyId || getLength(lobbyInfo!, lobby.id) === 6}
                                     title={`Join ${lobby.name}`}
                                     onClick={() => handleJoinLobby(lobby.id)} >
                                     {`${lobby.name} - ${getLength(lobbyInfo!, lobby.id)} / 6`}

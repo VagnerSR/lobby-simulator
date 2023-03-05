@@ -21,7 +21,7 @@ function LobbyInfo() {
         <div className="flex justify-center flex-col">
             <div className="mt-10">
 
-                <div className="flex justify-start gap-12">
+                <div className="flex justify-start md:justify-between gap-12">
                     <LButton
                         text="Leave Lobby"
                         onClickFunc={handleLeaveLobby} />
@@ -36,6 +36,10 @@ function LobbyInfo() {
                             </h2>
                         )
                     })}
+
+                    <div className="hidden md:block w-[120px]">
+
+                    </div>
                 </div>
 
                 {/* <ul className="w-3/4 h-24 flex flex-col flex-wrap">

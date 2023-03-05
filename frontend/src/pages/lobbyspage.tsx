@@ -16,15 +16,21 @@ function LobbysPage() {
         <div>
             {username ? (
                 <div className='mt-10'>
-                    <LButton
-                        text="Go back"
-                        onClickFunc={backToHome} />
-                    <Lobbys />
+                    <div className="lg:flex lg:justify-center lg:items-center lg:mt-20">
+                        <div className="lg:flex lg:flex-col lg:justify-center lg:items-start bg-slate-800 lg:w-4/5">
+                            <LButton
+                                text="Go back"
+                                onClickFunc={backToHome} />
+
+                            <div className="lg:w-full bg-slate-800 ">
+                                <Lobbys />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             ) : (
                 <SomethingWentWrong />
             )}
-
         </div>
     );
 }

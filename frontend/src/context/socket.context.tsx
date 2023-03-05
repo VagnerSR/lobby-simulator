@@ -37,7 +37,7 @@ function SocketsProvider(props: any) {
     const [active, setActive] = useState(false)
 
     useEffect(() => {
-        window.onfocus = function () {
+        window.onfocus = () => {
             document.title = "Lobby Simulator"
         }
     }, [])
@@ -48,7 +48,7 @@ function SocketsProvider(props: any) {
     })
 
     socket.on(EVENTS.SERVER.LOBBY_USERS_LIST, (value) => {
-        setLobbyInfo!(value)
+        setLobbyInfo(value)
     })
 
     socket.on(EVENTS.SERVER.LOBBY_FULL, () => {

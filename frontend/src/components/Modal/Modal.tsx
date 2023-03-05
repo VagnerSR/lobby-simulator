@@ -31,7 +31,7 @@ function Modal({ visible, onClose }: ModalProps) {
 
                 <div className="flex flex-col m-5">
                     <span className="text-gray-200 text-xl pb-6">
-                        {`Sorry! Lobby is full :(`}
+                        {`Username already exists in this lobby :(`}
                     </span>
                     <LButton
                         text="Ok"
