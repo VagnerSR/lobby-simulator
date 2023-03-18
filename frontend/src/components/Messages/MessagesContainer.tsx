@@ -2,11 +2,14 @@ import EVENTS from "@/config/events";
 import { useSockets } from "@/context/socket.context";
 import { addZeros } from "@/utils/addZeros";
 import { useEffect, useRef } from "react";
-import LobbyInfo from "../LobbyInfo/LobbyInfo";
 import { FaUserCircle } from "react-icons/fa";
+import dynamic from "next/dynamic";
+import LobbyInfo from "../LobbyInfo/LobbyInfo";
 import LButton from "../LButton/LButton";
-import NavMenu from "../NavMenu/NavMenu";
-import NavMenuMessage from "../NavMenu/NavMenuMessage";
+
+const NavMenuMessage = dynamic(() => import('../NavMenu/NavMenuMessage'), {
+    ssr: false
+  })
 
 function MessagesContainer() {
     const { socket, messages, lobbyId, username, setMessages } = useSockets()

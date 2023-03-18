@@ -1,5 +1,4 @@
 import { Server, Socket } from "socket.io";
-import logger from "./utils/logger";
 import { getUsersList, userJoin, userLeave } from "./utils/users";
 
 const EVENTS = {
@@ -28,11 +27,8 @@ const EVENTS = {
 
 
 function socket({ io }: { io: Server }) {
-  logger.info(`Sockets enabled`)
 
   io.on(EVENTS.connection, (socket: Socket) => {
-    logger.info(`User connected ${socket.id}`)
-    
 
     socket.on(EVENTS.CLIENT.GET_LOBBY_INFO, () => {
       io.emit(EVENTS.SERVER.LOBBY_USERS_LIST, getUsersList())

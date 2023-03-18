@@ -13,6 +13,9 @@ module.exports = {
       sans: ['Inter', 'sans-serif']
     },
     extend: {
+      backgroundImage: {
+        'waves': "url('/waves.svg')",
+      },
       display: ["group-hover"],
       keyframes: {
         wavebash: {

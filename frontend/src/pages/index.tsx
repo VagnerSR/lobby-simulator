@@ -1,10 +1,13 @@
-import LButton from '@/components/LButton/LButton'
 import EVENTS from '@/config/events'
 import { Inter } from '@next/font/google'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useEffect, useRef } from 'react'
 import { useSockets } from "../context/socket.context"
 
+const LButton = dynamic(() => import('../components/LButton/LButton'), {
+  ssr: false
+})
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -31,7 +34,7 @@ export default function Home() {
 
   return (
     <>
-      <div className='mt-16 p-4 '>
+      <div className='mt-16 p-4'>
         <p className='mb-8 pl-6 pr-6 text-center text-3xl text-gray-200'>Tired of playing games, losing and getting trashed for it?</p>
         <p className='mb-5 pl-6 pr-6 text-center text-xl text-gray-400'>Join lobby simulator, where you can just chill and talk on the lobby, without any gameplay to disturb you.</p>
         <hr />

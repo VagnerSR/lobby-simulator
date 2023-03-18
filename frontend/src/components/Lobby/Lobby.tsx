@@ -3,9 +3,13 @@ import { getLength } from "@/utils/getLength";
 import EVENTS from "../../config/events"
 import lobbysJson from "./lobby.json"
 import LiUser from "../LiUser/LiUser";
-import Modal from "../Modal/Modal";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
+
+const Modal = dynamic(() => import('../Modal/Modal'), {
+    ssr: false
+})
 
 function Lobbys() {
     const { socket, lobbyId, username, lobbyInfo, showMyModal, setShowMyModal, setActive } = useSockets()

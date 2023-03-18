@@ -1,6 +1,11 @@
 import MessagesContainer from "@/components/Messages/MessagesContainer";
-import SomethingWentWrong from "@/components/SomethingWentWrong/SomethingWentWrong";
 import { useSockets } from "@/context/socket.context";
+import dynamic from "next/dynamic";
+
+  const SomethingWentWrong = dynamic(() => import('../components/SomethingWentWrong/SomethingWentWrong'), {
+    ssr: false
+  })
+
 
 function lobbymessage() {
     const { username } = useSockets()
