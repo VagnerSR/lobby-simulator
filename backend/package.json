@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon ./src/app.ts"
@@ -22,8 +25,5 @@
     "config": "^3.3.9",
     "express": "^4.18.2",
     "socket.io": "^4.5.4"
-  },
-  "engines": {
-    "node": "18.10.0"
   }
 }
