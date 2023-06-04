@@ -16,17 +16,13 @@ function MessagesContainer() {
 
   const newMessageRef = useRef<HTMLTextAreaElement>(null);
   const messageEndRef = useRef<HTMLDivElement>(null);
+  const date = new Date();
 
   useEffect(() => {
     if (messageEndRef.current) {
       messageEndRef.current.scrollTop = messageEndRef.current.scrollHeight;
     }
   }, [messages]);
-
-    function getDate(): Date {
-      const date = new Date();
-      return date;
-    }
 
   function handleSendMessage() {
     const message = newMessageRef?.current?.value;
@@ -41,14 +37,13 @@ function MessagesContainer() {
       username,
     });
 
-    const date = new Date();
     setMessages([
       ...messages!,
       {
         username: "You",
         message: `- ${message}`,
-        hours: `${getDate().getHours()}`,
-        minutes: `${getDate().getMinutes()}`,
+        hours: `${date.getHours()}`,
+        minutes: `${date.getMinutes()}`,
       },
     ]);
 
@@ -74,7 +69,7 @@ function MessagesContainer() {
               >
                 <span className=" pl-10 relative">
                   <FaUserCircle className="absolute bottom-1 left-3" />{" "}
-                  {`${username} - ${getDate().getHours()}:${getDate().getMinutes()}`}
+                  {`${username} - ${date.getHours()}:${date.getMinutes()}`}
                 </span>
                 <span className="pl-10 pr-3">{message}</span>
               </div>
