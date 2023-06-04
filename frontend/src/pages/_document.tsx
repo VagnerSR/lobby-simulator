@@ -6,7 +6,7 @@ export default function Document() {
       <Head>
         <meta name="description" content="Lobby Simulator" />
         <meta property='og:title' content='Lobby Simulator' />
-        <meta name="theme-color" content="#000000" />
+        <meta name="theme-color" content="#0f172a" />
         <link rel="shortcut icon" href="/L.png" />
         <link rel="apple-touch-icon" href="/L.png" />
       </Head>

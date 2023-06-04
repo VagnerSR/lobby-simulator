@@ -3,7 +3,6 @@ import { IMessage } from "@/interface/IMessage";
 import { IUser } from "@/interface/IUser";
 import { createContext, useContext, useEffect, useState } from "react"
 import io, { Socket } from "socket.io-client"
-import { SOCKET_URL } from "../config/default"
 
 interface Context {
     socket: Socket;
@@ -19,7 +18,7 @@ interface Context {
     setActive?: Function
 }
 
-const socket = io(SOCKET_URL!)
+const socket = io("https://lobby-simulator.onrender.com")
 
 const SocketContext = createContext<Context>({
     socket,
