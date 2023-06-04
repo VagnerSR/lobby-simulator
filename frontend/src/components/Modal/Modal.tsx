@@ -1,5 +1,6 @@
 import { AiFillCloseCircle } from "react-icons/ai";
 import LButton from "../LButton/LButton";
+import { useEffect, useRef } from "react";
 
 interface ModalProps {
     visible: boolean
@@ -11,10 +12,17 @@ function Modal({ visible, onClose }: ModalProps) {
         if (e.target.id === "container") onClose()
     }
 
+    const buttonRef = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+        buttonRef.current?.focus();
+      }, [visible]);
+
     if (!visible) return null;
 
     return (
         <div
+        
             id="container"
             onClick={handleOnClose}
             className="fixed inset-0 bg-black bg-opacity-30 
@@ -23,6 +31,7 @@ function Modal({ visible, onClose }: ModalProps) {
             <div className="bg-slate-700 rounded p-2">
                 <div className="flex justify-end">
                     <button 
+                    ref={buttonRef}
                         className="text-gray-200"
                         onClick={onClose} >
                         <AiFillCloseCircle size={30}/>

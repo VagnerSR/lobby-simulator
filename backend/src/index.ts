@@ -1,13 +1,11 @@
 import express from "express"
 import { createServer } from "http"
 import { Server } from "socket.io"
-import config from "config"
 import { version } from "../package.json"
 import socket from "./socket"
 
-const port =  config.get<number>("port")
-const host = config.get<string>("host")
-const corsOrigin = config.get<string>("corsOrigin")
+const port = process.env.PORT || 4000
+const corsOrigin = ("http://localhost:3000")
 
 const app = express()
 
@@ -22,6 +20,6 @@ const io = new Server(httpServer, {
 
 app.get('/', (req, res) => res.send(`Server is up! Version: ${version}`))
 
-httpServer.listen(port, host, () => {
+httpServer.listen(port, () => {
     socket({ io })
 })

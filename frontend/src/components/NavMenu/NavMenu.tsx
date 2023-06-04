@@ -6,54 +6,58 @@ import ContactInfo from "../ContactInfo/Contactinfor";
 import Lobbys from "../Lobby/Lobby";
 
 function NavMenu() {
-    const { username, active, setActive } = useSockets()
+  const { username, active, setActive } = useSockets();
 
-    const menuRef = useRef<HTMLDivElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null);
 
-    const handleClickOutside = (e: MouseEvent) => {
-        if (!menuRef?.current?.contains(e.target as HTMLElement)) {
-            setActive!(false)
-        }
+  const handleClickOutside = (e: MouseEvent) => {
+    if (!menuRef?.current?.contains(e.target as HTMLElement)) {
+      setActive!(false);
     }
+  };
 
-    useEffect(() => {
-        document.addEventListener('click', handleClickOutside, true)
-    }, [])
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true);
+  }, []);
 
-    return (
-        <>
-            <button
-                className="text-gray-100 mt-6 cursor-pointer"
-                onClick={() => setActive!(!active)} >
-                <BsThreeDotsVertical size={25} />
-            </button>
+  return (
+    <>
+      <button
+        className="text-gray-100 mt-6 cursor-pointer"
+        onClick={() => setActive!(!active)}
+      >
+        <BsThreeDotsVertical size={25} />
+      </button>
 
-            <div className={`${active ? 'block' : 'hidden'} fixed right-0 left-1/4 md:left-2/4 lg:left-2/3
+      <div
+        className={`${
+          active ? "block" : "hidden"
+        } fixed right-0 left-1/4 md:left-2/4 lg:left-2/3
              2xl:left-3/4
                  inset-y-0 bg-slate-600 z-20 overflow-y-auto `}
-                ref={menuRef}>
-                <div className="flex justify-end">
-                    <button
-                        className="text-gray-100 mt-7 mr-6 cursor-pointer"
-                        onClick={() => setActive!(false)} >
-                        <AiOutlineClose size={25} />
-                    </button>
-                </div>
+        ref={menuRef}
+      >
+        <div className="flex justify-end">
+          <button
+            className="text-gray-100 mt-7 mr-6 cursor-pointer"
+            onClick={() => setActive!(false)}
+          >
+            <AiOutlineClose size={25} />
+          </button>
+        </div>
 
-                {username ? (
-                    <nav className="">
-                        <Lobbys />
-                    </nav>
-                ) : (
-                    <div>
+        {username ? (
+          <nav className="">
+            <Lobbys transparent={false} />
+          </nav>
+        ) : (
+          <div></div>
+        )}
 
-                    </div>
-                )}
-
-                    <ContactInfo />
-            </div>
-        </>
-    );
+        <ContactInfo />
+      </div>
+    </>
+  );
 }
 
 export default NavMenu;

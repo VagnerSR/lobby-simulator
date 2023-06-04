@@ -9,12 +9,8 @@ export default function Document() {
         <meta name="theme-color" content="#000000" />
         <link rel="shortcut icon" href="/L.png" />
         <link rel="apple-touch-icon" href="/L.png" />
-
-        <title>
-          Lobby Simulator
-        </title>
       </Head>
-      <body className='bg-slate-800'>
+      <body>
         <Main />
         <NextScript />
       </body>

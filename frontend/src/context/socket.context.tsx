@@ -19,7 +19,7 @@ interface Context {
     setActive?: Function
 }
 
-const socket = io(SOCKET_URL)
+const socket = io(SOCKET_URL!)
 
 const SocketContext = createContext<Context>({
     socket,

@@ -9,12 +9,16 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    fontFamily: {
-      sans: ['Inter', 'sans-serif']
-    },
     extend: {
-      backgroundImage: {
-        'waves': "url('/waves.svg')",
+      colors: {
+        dark: "#242424",
+        light: "rgb(224 231 255)",
+        primary: "rgb(229 231 235)",
+        primaryDark: "rgb(224 231 255)",
+        secondary: "rgb(20 184 166)",
+        secondaryDark: "rgb(165 180 252)",
+        vivid: "rgb(153 246 228)",
+        vividDark: "rgb(167 139 250)",
       },
       display: ["group-hover"],
       keyframes: {
