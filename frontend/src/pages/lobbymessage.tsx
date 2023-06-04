@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
   })
 
 
-function lobbymessage() {
+function Lobbymessage() {
     const { username } = useSockets()
     return (
         <div>
@@ -21,4 +21,4 @@ function lobbymessage() {
     );
 }
 
-export default lobbymessage;
+export default Lobbymessage;
