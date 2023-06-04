@@ -51,10 +51,6 @@ function MessagesContainer() {
     newMessageRef?.current?.focus();
   }
 
-  useEffect(() => {
-    newMessageRef?.current?.focus();
-  }, []);
-
   return (
     <div className="">
       <NavMenuMessage />
