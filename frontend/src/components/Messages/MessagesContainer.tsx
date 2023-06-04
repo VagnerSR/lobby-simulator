@@ -23,10 +23,10 @@ function MessagesContainer() {
     }
   }, [messages]);
 
-  function getDate(): Date {
-    const date = new Date();
-    return date;
-  }
+    function getDate(): Date {
+      const date = new Date();
+      return date;
+    }
 
   function handleSendMessage() {
     const message = newMessageRef?.current?.value;
@@ -47,8 +47,8 @@ function MessagesContainer() {
       {
         username: "You",
         message: `- ${message}`,
-        hours: `${getDate().getHours}`,
-        minutes: `${getDate().getMinutes}`,
+        hours: `${getDate().getHours()}`,
+        minutes: `${getDate().getMinutes()}`,
       },
     ]);
 
@@ -74,7 +74,7 @@ function MessagesContainer() {
               >
                 <span className=" pl-10 relative">
                   <FaUserCircle className="absolute bottom-1 left-3" />{" "}
-                  {`${username} - ${getDate().getHours}:${getDate().getMinutes}`}
+                  {`${username} - ${getDate().getHours()}:${getDate().getMinutes()}`}
                 </span>
                 <span className="pl-10 pr-3">{message}</span>
               </div>
