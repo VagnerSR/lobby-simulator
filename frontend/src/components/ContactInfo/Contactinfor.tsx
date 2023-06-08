@@ -9,7 +9,8 @@ function ContactInfo() {
 
             <a
                 className="hover:text-blue-400 hover:underline"
-                href="https://github.com/VagnerSR" >
+                href="https://github.com/VagnerSR"
+                aria-label="link to my github" >
                 <span className=" flex justify-center gap-2">
                     My GitHub
                     <AiFillGithub size={30} />
@@ -19,7 +20,8 @@ function ContactInfo() {
                 {`You can check the git repository `}
                 <a
                     className="text-blue-400 hover:underline"
-                    href="https://github.com/VagnerSR/lobby-simulator">
+                    href="https://github.com/VagnerSR/lobby-simulator"
+                    aria-label="link to github repository">
                     {`here`}
                 </a>
                 .

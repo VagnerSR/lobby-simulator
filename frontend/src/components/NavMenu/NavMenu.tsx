@@ -25,6 +25,7 @@ function NavMenu() {
       <button
         className="text-gray-100 mt-6 cursor-pointer"
         onClick={() => setActive!(!active)}
+        aria-label="Open Menu Button"
       >
         <BsThreeDotsVertical size={25} />
       </button>
@@ -41,6 +42,7 @@ function NavMenu() {
           <button
             className="text-gray-100 mt-7 mr-6 cursor-pointer"
             onClick={() => setActive!(false)}
+            aria-label="Close Menu Button"
           >
             <AiOutlineClose size={25} />
           </button>
