@@ -52,7 +52,7 @@ function Lobbys({ transparent }: LobbysProps) {
         socket.emit(EVENTS.CLIENT.GET_LOBBY_INFO);
         socket.emit(EVENTS.CLIENT.LEAVE_LOBBY, { lobbyId, username });
         socket.emit(EVENTS.CLIENT.JOIN_LOBBY, { key, username });
-        router.push("/lobbymessage");
+        router.push("/Lobbymessage");
         setActive!(false);
       } else {
         setShowMyModal!(true);

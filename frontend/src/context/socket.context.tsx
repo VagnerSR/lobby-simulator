@@ -3,6 +3,7 @@ import { IMessage } from "@/interface/IMessage";
 import { IUser } from "@/interface/IUser";
 import { createContext, useContext, useEffect, useState } from "react"
 import io, { Socket } from "socket.io-client"
+import { addZeros } from "@/utils/addZeros";
 
 interface Context {
     socket: Socket;
@@ -62,13 +63,17 @@ function SocketsProvider(props: any) {
         if (!document.hasFocus()) {
             document.title = "New message"
         }
+        const minutesWithZeros = addZeros(minutes, 2);
+        const hoursWithZeros = addZeros(hours, 2);
+        console.log(hoursWithZeros, minutesWithZeros);
+
         setMessages([
             ...messages,
             {
                 message,
                 username,
-                hours,
-                minutes
+                hours: hoursWithZeros,
+                minutes: minutesWithZeros
             }
         ])
     })

@@ -1,6 +1,6 @@
 export interface IMessage {
     message: string
-    hours: number
-    minutes: number
+    hours: string
+    minutes: string
     username: string
 }

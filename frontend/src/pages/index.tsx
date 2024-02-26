@@ -24,7 +24,7 @@ export default function Home() {
     setUsername(value.trim());
     socket.emit(EVENTS.CLIENT.GET_LOBBY_INFO);
     localStorage.setItem("username", value.trim());
-    router.push("/lobbyspage");
+    router.push("/Lobbyspage");
   }
 
   useEffect(() => {
