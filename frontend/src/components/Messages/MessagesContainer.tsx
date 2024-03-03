@@ -1,7 +1,7 @@
 import EVENTS from "@/config/events";
 import { useSockets } from "@/context/socket.context";
 import { addZeros } from "@/utils/addZeros";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import dynamic from "next/dynamic";
 import LobbyInfo from "../LobbyInfo/LobbyInfo";
@@ -17,6 +17,14 @@ function MessagesContainer() {
   const newMessageRef = useRef<HTMLTextAreaElement>(null);
   const messageEndRef = useRef<HTMLDivElement>(null);
   const date = new Date();
+
+  const onEnterPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if(e.keyCode == 13 && e.shiftKey == false) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  }
+  
 
   useEffect(() => {
     if (messageEndRef.current) {
@@ -79,6 +87,7 @@ function MessagesContainer() {
 
           <div className="flex items-center mt-4 ">
             <textarea
+              onKeyDown={onEnterPress}
               className="bg-slate-800 w-full rounded h-20 p-3 text-gray-300 text-lg"
               rows={1}
               placeholder="Say something"

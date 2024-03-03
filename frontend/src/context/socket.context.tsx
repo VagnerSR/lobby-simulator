@@ -63,9 +63,9 @@ function SocketsProvider(props: any) {
         if (!document.hasFocus()) {
             document.title = "New message"
         }
-        const minutesWithZeros = addZeros(minutes, 2);
-        const hoursWithZeros = addZeros(hours, 2);
-        console.log(hoursWithZeros, minutesWithZeros);
+        const date = new Date()
+        const hoursWithZeros = addZeros(date.getHours(), 2)
+        const minutesWithZeros = addZeros(date.getMinutes(), 2)
 
         setMessages([
             ...messages,
