@@ -1,5 +1,5 @@
 import EVENTS from "@/config/events";
-import { Inter } from "@next/font/google";
+import { Inter } from "next/font/google";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
